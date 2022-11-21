@@ -519,48 +519,7 @@ def main():
                 goal_joint_angle[3] = 0.70
                 pathtime = 5.0
                 teleop_keyboard.send_goal_joint_space(pathtime)
-            elif key_value == '3':  # marker 탐색중
-                goal_joint_angle[0] = radians(-30)
-                goal_joint_angle[1] = -1.4
-                goal_joint_angle[2] = 1.1
-                goal_joint_angle[3] = 0.35
-                goal_joint_angle[4] = 0.01
-                pathtime = 5.0
-                teleop_keyboard.send_goal_joint_space(pathtime)
-                teleop_keyboard.send_tool_control_request()
-            elif key_value == '4':  # marker 탐지시 정면으로 이동
-                goal_joint_angle[0] = radians(0)
-                goal_joint_angle[1] = 0.0   # 이동위치 정하기
-                goal_joint_angle[2] = 0.0
-                goal_joint_angle[3] = 0.0
-                pathtime = 5.0
-                teleop_keyboard.send_goal_joint_space(pathtime)
-            elif key_value == '5':  # 이동 후 물건을 집음
-                goal_joint_angle[4] = 0.00  # 물체의 크기에 따라 정도 정하기
-                teleop_keyboard.send_tool_control_request()
-            elif key_value == '6':  # 1번 marker면 특정 위치
-                goal_joint_angle[0] = radians(-70)
-                goal_joint_angle[1] = 0.0   # 이동위치 정하기
-                goal_joint_angle[2] = 0.0
-                goal_joint_angle[3] = 0.0
-                pathtime = 5.0
-                teleop_keyboard.send_goal_joint_space(pathtime)
-            elif key_value == '7':  # 2번 marker면 turtle봇 위
-                goal_joint_angle[0] = radians(70)
-                goal_joint_angle[1] = 0.0   # 이동위치 정하기
-                goal_joint_angle[2] = 0.0
-                goal_joint_angle[3] = 0.0
-                pathtime = 5.0
-                teleop_keyboard.send_goal_joint_space(pathtime)
-            elif key_value == '8':  # 이동완료 시 놓기
-                goal_joint_angle[4] = 0.01
-                teleop_keyboard.send_tool_control_request()
-            elif key_value == '9':  # 물체를 건드리지 않게 뒤로 빼고 3번으로 돌아가기
-                goal_joint_angle[1] = -1.4
-                goal_joint_angle[2] = 1.1
-                goal_joint_angle[3] = 0.35
-                pathtime = 5.0
-                teleop_keyboard.send_goal_joint_space(pathtime)   
+
             else:
                 if key_value == '\x03':
                     break
