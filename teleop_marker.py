@@ -56,7 +56,7 @@ class ArucoNode(rclpy.node.Node):
     def __init__(self):
         super().__init__('aruco_node')
         # project parameters
-        self.declare_parameter("manipulator1_topic", "False")
+        self.declare_parameter("manipulator1_param", "False")
         
         # ArucoNode / Declare and read parameters
         self.declare_parameter("marker_size", .04)
@@ -164,8 +164,6 @@ class ArucoNode(rclpy.node.Node):
             except Exception as e:
                 print(e)
             
-            # /aruco_marker manipulator1_topic의 parameters를 False->True로 변경
-            self.set_parameters([rclpy.parameter.Parameter('manipulator1_topic',rclpy.Parameter.Type.STRING,'True')])
 
 			# 물건을 집기
             goal_joint_angle[0] = radians(0)
@@ -196,10 +194,10 @@ class ArucoNode(rclpy.node.Node):
             goal_joint_angle[4] = 0.005
             teleop_keyboard.send_tool_control_request()
             
+            # /aruco_marker manipulator1_param을 False->True로 변경
+            self.set_parameters([rclpy.parameter.Parameter('manipulator1_param',rclpy.Parameter.Type.STRING,'True')])
 
-            
-            
-            
+
 
 class TeleopKeyboard(Node):
 
