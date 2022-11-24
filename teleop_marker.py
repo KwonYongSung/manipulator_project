@@ -11,7 +11,9 @@ from sensor_msgs.msg import CameraInfo
 from sensor_msgs.msg import Image
 from geometry_msgs.msg import PoseArray, Pose
 from ros2_aruco_interfaces.msg import ArucoMarkers
-
+from rcl_interfaces.srv import SetParameters, GetParameters, ListParameters
+from rclpy.exceptions import ParameterNotDeclaredException
+from rclpy.parameter import Parameter
 
 #manipulator
 from math import exp
@@ -56,7 +58,11 @@ class ArucoNode(rclpy.node.Node):
     def __init__(self):
         super().__init__('aruco_node')
         # project parameters
-        self.declare_parameter("manipulator1_param", "False")
+        self.declare_parameter("manipulator1_param", "False") #지금은 미사용
+        
+        self.cli = self.create_client(SetParameters, 'minimal_param_node/set_parameters')
+        # 'minimal_param_node' : 터틀봇의 super().__init__('')값
+        self.req = SetParameters.Request()
         
         # ArucoNode / Declare and read parameters
         self.declare_parameter("marker_size", .04)
@@ -98,6 +104,14 @@ class ArucoNode(rclpy.node.Node):
         self.aruco_dictionary = cv2.aruco.Dictionary_get(dictionary_id)
         self.aruco_parameters = cv2.aruco.DetectorParameters_create()
         self.bridge = CvBridge()
+
+
+# 터틀봇의 파라미터를 True로 바꾸는 함수
+    def send_request(self):
+        self.req.parameters = [Parameter(name='turtle_param', value='True').to_parameter_msg()]
+        self.future = self.cli.call_async(self.req)
+
+
 
     def info_callback(self, info_msg):
         self.info_msg = info_msg
@@ -163,9 +177,8 @@ class ArucoNode(rclpy.node.Node):
                 teleop_keyboard = TeleopKeyboard()
             except Exception as e:
                 print(e)
-            
 
-			# 물건을 집기
+
             goal_joint_angle[0] = radians(0)
             goal_joint_angle[1] = radians(16)
             goal_joint_angle[2] = 0.00
@@ -190,13 +203,12 @@ class ArucoNode(rclpy.node.Node):
             teleop_keyboard.send_goal_joint_space(pathtime)
             time.sleep(5)
 			
-			
             goal_joint_angle[4] = 0.005
             teleop_keyboard.send_tool_control_request()
             
-            # /aruco_marker manipulator1_param을 False->True로 변경
-            self.set_parameters([rclpy.parameter.Parameter('manipulator1_param',rclpy.Parameter.Type.STRING,'True')])
+            self.send_request() # 매니퓰레이터 동작 후 터틀봇의 파라미터를 True로 변경함
 
+        
 
 
 class TeleopKeyboard(Node):
@@ -354,9 +366,7 @@ def main():
 
     node = ArucoNode()
     rclpy.spin(node)
-    node.destroy_node()
-    rclpy.shutdown()
-
+    
     settings = None
     if os.name != 'nt':
         settings = termios.tcgetattr(sys.stdin)
@@ -369,8 +379,8 @@ def main():
     if os.name != 'nt':
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
     teleop_keyboard.destroy_node()
+    node.destroy_node()
     rclpy.shutdown()
-
 
 if __name__ == '__main__':
     main()
