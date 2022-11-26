@@ -14,17 +14,16 @@ class ClientFollowPoints(Node):
     def __init__(self):
         super().__init__('minimal_param_node')
         self.declare_parameter("turtle_param", "stop")
-        
         self._client = ActionClient(self, FollowWaypoints, '/FollowWaypoints')
+        
         timer_period = 2  # seconds
         self.timer = self.create_timer(timer_period, self.start)
 
         
     def start(self):
         param = self.get_parameter('turtle_param').get_parameter_value().string_value
-        print('scan')
-        if param == 'go':
-            print('go')
+        if param == 'go1' or param == 'go2':
+            print(param)
             self.set_parameters([rclpy.parameter.Parameter('turtle_param', rclpy.Parameter.Type.STRING, 'stop')])
             rgoal = PoseStamped()
             rgoal.header.frame_id = "map"
@@ -33,8 +32,8 @@ class ClientFollowPoints(Node):
 
                 # 매니퓰레이터2 목적지
             rgoal.pose.position.z = -0.00143
-            rgoal.pose.position.x = -0.285
-            rgoal.pose.position.y = 1.08
+            rgoal.pose.position.x = -0.616
+            rgoal.pose.position.y = 0.856
 
                 # 매니퓰레이터1 목적지 설정하기 
             #rgoal.pose.position.z = 0.0
