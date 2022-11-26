@@ -106,10 +106,14 @@ class ArucoNode(rclpy.node.Node):
         self.bridge = CvBridge()
 
 
-# 터틀봇의 파라미터를 True로 바꾸는 함수
-    def send_request(self):
-        self.req.parameters = [Parameter(name='turtle_param', value='go').to_parameter_msg()]
-        self.future = self.cli.call_async(self.req)
+# 터틀봇의 파라미터를 go로 바꾸는 함수
+    def send_request(self, ID):
+        if ID == 1:
+            self.req.parameters = [Parameter(name='turtle_param', value='go1').to_parameter_msg()]
+            self.future = self.cli.call_async(self.req)
+        elif ID == 2:
+            self.req.parameters = [Parameter(name='turtle_param', value='go2').to_parameter_msg()]
+            self.future = self.cli.call_async(self.req)
 
 
 
@@ -194,19 +198,42 @@ class ArucoNode(rclpy.node.Node):
             teleop_keyboard.send_goal_joint_space(pathtime)
             time.sleep(1)
             
-            #if marker_ids == [0]:  #0번 마커가 인식되면 특정 위치에 놓기
-            goal_joint_angle[0] = radians(0)
-            goal_joint_angle[1] = radians(-10)
-            goal_joint_angle[2] = 0.00
-            goal_joint_angle[3] = 0.00
-            pathtime = 3.0
-            teleop_keyboard.send_goal_joint_space(pathtime)
-            time.sleep(3)
-			
-            goal_joint_angle[4] = 0.005
-            teleop_keyboard.send_tool_control_request()
+            if marker_ids == [0]:  #0번 마커가 인식되면 특정 위치에 놓기
+                goal_joint_angle[0] = radians(-20)
+                goal_joint_angle[1] = radians(-10)
+                goal_joint_angle[2] = 0.00
+                goal_joint_angle[3] = 0.00
+                pathtime = 3.0
+                teleop_keyboard.send_goal_joint_space(pathtime)
+                time.sleep(3)
+                goal_joint_angle[4] = 0.005
+                teleop_keyboard.send_tool_control_request()
+
+            elif marker_ids == [1]:  #0번 마커가 인식되면 특정 위치에 놓기
+                goal_joint_angle[0] = radians(20)
+                goal_joint_angle[1] = radians(-10)
+                goal_joint_angle[2] = 0.00
+                goal_joint_angle[3] = 0.00
+                pathtime = 3.0
+                teleop_keyboard.send_goal_joint_space(pathtime)
+                time.sleep(3)
+                goal_joint_angle[4] = 0.005
+                teleop_keyboard.send_tool_control_request()
+
+                self.send_request(1) # 매니퓰레이터 동작 후 터틀봇의 파라미터를 go로 변경함
             
-            self.send_request() # 매니퓰레이터 동작 후 터틀봇의 파라미터를 True로 변경함
+            elif marker_ids == [2]:  #0번 마커가 인식되면 특정 위치에 놓기
+                goal_joint_angle[0] = radians(20)
+                goal_joint_angle[1] = radians(-10)
+                goal_joint_angle[2] = 0.00
+                goal_joint_angle[3] = 0.00
+                pathtime = 3.0
+                teleop_keyboard.send_goal_joint_space(pathtime)
+                time.sleep(3)
+                goal_joint_angle[4] = 0.005
+                teleop_keyboard.send_tool_control_request()
+
+                self.send_request(2) # 매니퓰레이터 동작 후 터틀봇의 파라미터를 go로 변경함
 
         
 
