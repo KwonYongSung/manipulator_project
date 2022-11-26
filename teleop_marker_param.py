@@ -58,7 +58,7 @@ class ArucoNode(rclpy.node.Node):
     def __init__(self):
         super().__init__('aruco_node')
         # project parameters
-        self.declare_parameter("manipulator1_param", "False") #지금은 미사용
+        self.declare_parameter("manipulator1_param", "false") #지금은 미사용
         
         self.cli = self.create_client(SetParameters, 'minimal_param_node/set_parameters')
         # 'minimal_param_node' : 터틀봇의 super().__init__('')값
@@ -108,7 +108,7 @@ class ArucoNode(rclpy.node.Node):
 
 # 터틀봇의 파라미터를 True로 바꾸는 함수
     def send_request(self):
-        self.req.parameters = [Parameter(name='turtle_param', value='True').to_parameter_msg()]
+        self.req.parameters = [Parameter(name='turtle_param', value='go').to_parameter_msg()]
         self.future = self.cli.call_async(self.req)
 
 

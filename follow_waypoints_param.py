@@ -13,7 +13,7 @@ class ClientFollowPoints(Node):
 
     def __init__(self):
         super().__init__('minimal_param_node')
-        self.declare_parameter("turtle_param", "False")
+        self.declare_parameter("turtle_param", "stop")
         
         self._client = ActionClient(self, FollowWaypoints, '/FollowWaypoints')
         timer_period = 2  # seconds
@@ -22,30 +22,32 @@ class ClientFollowPoints(Node):
         
     def start(self):
         param = self.get_parameter('turtle_param').get_parameter_value().string_value
-        
-        if param == 'True':
-            self.set_parameters([rclpy.parameter.Parameter('turtle_param', rclpy.Parameter.Type.STRING, 'False')])
+        print('scan')
+        if param == 'go':
+            print('go')
+            self.set_parameters([rclpy.parameter.Parameter('turtle_param', rclpy.Parameter.Type.STRING, 'stop')])
             rgoal = PoseStamped()
             rgoal.header.frame_id = "map"
             rgoal.header.stamp.sec = 0
             rgoal.header.stamp.nanosec = 0
-            ''' 
-            rgoal.pose.position.z = 0.0
-            rgoal.pose.position.x = .15
-            rgoal.pose.position.y = -0.37
-            '''
-            #'''
+
+                # 매니퓰레이터2 목적지
             rgoal.pose.position.z = -0.00143
             rgoal.pose.position.x = -0.285
             rgoal.pose.position.y = 1.08
-            #'''
+
+                # 매니퓰레이터1 목적지 설정하기 
+            #rgoal.pose.position.z = 0.0
+            #rgoal.pose.position.x = .15
+            #rgoal.pose.position.y = -0.37
+
             rgoal.pose.orientation.w = 1.0
             print(rgoal)
             mgoal = [rgoal]
 
             self.send_points(mgoal)
             
-        elif param == 'False':
+        elif param == 'stop':
             pass
         
         
@@ -82,7 +84,7 @@ def main(args=None):
     follow_points_client = ClientFollowPoints()
     print('client inited')
     
-    follow_points_client.start()
+    #follow_points_client.start()
     
     rclpy.spin(follow_points_client)
     
