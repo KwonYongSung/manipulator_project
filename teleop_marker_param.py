@@ -234,6 +234,18 @@ class ArucoNode(rclpy.node.Node):
                 teleop_keyboard.send_tool_control_request()
 
                 self.send_request(2) # 매니퓰레이터 동작 후 터틀봇의 파라미터를 go로 변경함
+        	
+        	time.sleep(20)
+        	
+        	goal_joint_angle[0] = radians(-20)
+			goal_joint_angle[1] = -1.4
+			goal_joint_angle[2] = 1.1
+			goal_joint_angle[3] = 0.35
+			goal_joint_angle[4] = 0.01
+			pathtime = 5.0
+			teleop_keyboard.send_goal_joint_space(pathtime)
+			teleop_keyboard.send_tool_control_request()
+
 
         
 
