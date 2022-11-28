@@ -30,15 +30,10 @@ class ClientFollowPoints(Node):
             rgoal.header.stamp.sec = 0
             rgoal.header.stamp.nanosec = 0
 
-                # 매니퓰레이터2 목적지
+                # 매니퓰레이터2 목적지. 좌표 수정하기
             rgoal.pose.position.z = -0.00143
             rgoal.pose.position.x = -0.616
             rgoal.pose.position.y = 0.856
-
-                # 매니퓰레이터1 목적지 설정하기 
-            #rgoal.pose.position.z = 0.0
-            #rgoal.pose.position.x = .15
-            #rgoal.pose.position.y = -0.37
 
             rgoal.pose.orientation.w = 1.0
             print(rgoal)
